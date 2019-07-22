@@ -412,6 +412,37 @@ def plugin_init(config):
                 else: 
                     break 
 
+        if data['lightHumEnable']['value'] == 'true':
+            data['light'].setDeviceSerialNumber(int(data['hubSN']['value']))
+            data['light'].setHubPort(int(data['lightPort']['value']))
+            data['light'].setIsHubPortDevice(False)
+            data['light'].setChannel(0)
+            i = 0 
+            while i < 120: 
+                try:
+                    data['light'].getIlluminance() 
+                except Exception: 
+                    time.sleep(1) 
+                    i += 1 
+                else: 
+                    break 
+
+        if data['tempHumEnable']['value'] == 'true':
+            data['sound'].setDeviceSerialNumber(int(data['hubSN']['value']))
+            data['sound'].setHubPort(int(data['soundPort']['value']))
+            data['sound'].setIsHubPortDevice(False)
+            data['sound'].setChannel(0)
+            i = 0
+            while i < 120:
+                try:
+                    data['sound'].getdB()
+                except Exception:
+                    time.sleep(1)
+                    i += 1
+                else:
+                    break
+
+
     except Exception as ex:
         _LOGGER.exception("foglamp_phidget exception: {}".format(str(ex)))
         raise ex
@@ -423,6 +454,8 @@ def plugin_init(config):
     data['accelerometerCount'] = 0 
     data['gyroscopeCount'] = 0 
     data['magnetometerCount'] = 0 
+    data['lightCount'] = 0  
+    data['soundCount'] = 0 
 
     # counter of last encoder value 
     data['encoderPreviousValue'] = 0
