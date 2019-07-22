@@ -619,6 +619,9 @@ def plugin_reconfigure(handle, new_config):
         handle['accelerometer'].close()  
         handle['gyroscope'].close() 
         handle['magnetometer'].close() 
+        handle['light'].close() 
+        handle['sound'].close() 
+
     except Exception as ex:
         _LOGGER.exception("foglamp_phidget exception: {}".format(str(ex)))
         raise ex
@@ -736,6 +739,36 @@ def plugin_reconfigure(handle, new_config):
                 else:
                     break
 
+        if data['lightHumEnable']['value'] == 'true':
+            data['light'].setDeviceSerialNumber(int(data['hubSN']['value']))
+            data['light'].setHubPort(int(data['lightPort']['value']))
+            data['light'].setIsHubPortDevice(False)
+            data['light'].setChannel(0)
+            i = 0 
+            while i < 120: 
+                try:
+                    data['light'].getIlluminance() 
+                except Exception: 
+                    time.sleep(1) 
+                    i += 1 
+                else: 
+                    break 
+
+        if data['soundHumEnable']['value'] == 'true':
+            data['sound'].setDeviceSerialNumber(int(data['hubSN']['value']))
+            data['sound'].setHubPort(int(data['soundPort']['value']))
+            data['sound'].setIsHubPortDevice(False)
+            data['sound'].setChannel(0)
+            i = 0
+            while i < 120:
+                try:
+                    data['sound'].getdB()
+                except Exception:
+                    time.sleep(1)
+                    i += 1
+                else:
+                    break
+
         # check if hub has changed, if so init restart 
         if new_handle['hubSN']['value'] != handle['hubSN']['value']:
             new_handle['restart'] = 'yes'
@@ -752,6 +785,8 @@ def plugin_reconfigure(handle, new_config):
     new_handle['accelerometerCount'] = 0
     new_handle['gyroscopeCount'] = 0
     new_handle['magnetometerCount'] = 0
+    new_handle['lightCount'] = 0 
+    new_handle['soundCount'] = 0 
 
     # counter of last encoder value
     new_handle['encoderPreviousValue'] = handle['encoderPreviousValue']
@@ -775,6 +810,9 @@ def plugin_shutdown(handle):
         handle['accelerometer'].close()
         handle['gyroscope'].close()
         handle['magnetometer'].close()
+        handle['light'].close() 
+        handle['sound'].close() 
+
     except Exception as ex:
         _LOGGER.exception("foglamp_phidget exception: {}".format(str(ex)))
         raise ex
