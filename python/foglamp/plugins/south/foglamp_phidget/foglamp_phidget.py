@@ -427,7 +427,7 @@ def plugin_init(config):
                 else: 
                     break 
 
-        if data['tempHumEnable']['value'] == 'true':
+        if data['soundHumEnable']['value'] == 'true':
             data['sound'].setDeviceSerialNumber(int(data['hubSN']['value']))
             data['sound'].setHubPort(int(data['soundPort']['value']))
             data['sound'].setIsHubPortDevice(False)
