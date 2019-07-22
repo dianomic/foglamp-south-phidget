@@ -215,7 +215,64 @@ _DEFAULT_CONFIG = {
         'default': 'true',
         'order': '24',
         'displayName': 'Enable Magnetometer'
+    },
+    'lightPort': {
+        'description': 'VINT Hub port of light sensors', 
+        'type': 'string',
+        'default': '0',
+        'order': '23',
+        'displayName': 'Spatial Port'
+    },
+    'lightAssetName': {
+        'description': 'light sensor asset name', 
+        'type': 'string',
+        'default': 'light',
+        'order': '24',
+        'displayName': 'light Asset Name'
+    },
+    'lightPoll': {
+        'description': 'Obtain light every nth time the plugin is pulled',
+        'type': 'integer',
+        'default': '1',
+        'order': '25',
+        'displayName': 'Magnetometer Poll'
+    },
+    'lightEnable': {
+        'description': 'Enable Magnetometer Sensor',
+        'type': 'boolean',
+        'default': 'true',
+        'order': '26',
+        'displayName': 'Enable Magnetometer'
+    },
+    'soundPort': {
+        'description': 'VINT Hub port of sound sensors', 
+        'type': 'string',
+        'default': '0',
+        'order': '27',
+        'displayName': 'Spatial Port'
+    },
+    'soundAssetName': {
+        'description': 'sound sensor asset name', 
+        'type': 'string',
+        'default': 'sound',
+        'order': '28',
+        'displayName': 'sound Asset Name'
+    },
+    'soundPoll': {
+        'description': 'Obtain sound every nth time the plugin is pulled',
+        'type': 'integer',
+        'default': '1',
+        'order': '29',
+        'displayName': 'Magnetometer Poll'
+    },
+    'soundEnable': {
+        'description': 'Enable Magnetometer Sensor',
+        'type': 'boolean',
+        'default': 'true',
+        'order': '30',
+        'displayName': 'Enable Magnetometer'
     }
+
 }
 
 _LOGGER = logger.setup(__name__, level=logging.INFO)
