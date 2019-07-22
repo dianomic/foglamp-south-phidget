@@ -230,7 +230,7 @@ def plugin_info():
     """
     return {
         'name': 'foglamp_phidget Poll Plugin',
-        'version': '1.0.0',
+        'version': '2.0.0',
         'mode': 'poll',
         'type': 'south',
         'interface': '1.0',
