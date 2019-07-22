@@ -6,7 +6,7 @@
 
 """ Module for Phidget poll mode plugin
 
-    The following is intended as the south service plugin of Dianomic wind turbine demo of FogLAMP.
+    The following is intended as the south service plugin of Dianomic phidget demo of FogLAMP.
     Phidget based sensors:
         - Temperature & Humidity: HUM1000_0 (https://www.phidgets.com/?tier=3&catid=14&pcid=12&prodid=644)
         - Spatial: MOT1101_0 (https://www.phidgets.com/?tier=3&catid=10&pcid=8&prodid=975)
@@ -43,7 +43,7 @@ __version__ = "${VERSION}"
 
 _DEFAULT_CONFIG = {
     'plugin': {
-        'description': 'Wind Turbine Poll Plugin',
+        'description': 'FogLAMP Phidget Poll Plugin',
         'type': 'string',
         'default': 'foglamp_phidget',
         'readonly': 'true'
@@ -220,57 +220,57 @@ _DEFAULT_CONFIG = {
         'description': 'VINT Hub port of light sensors', 
         'type': 'string',
         'default': '0',
-        'order': '23',
-        'displayName': 'Spatial Port'
+        'order': '25',
+        'displayName': 'Light Port'
     },
     'lightAssetName': {
         'description': 'light sensor asset name', 
         'type': 'string',
         'default': 'light',
-        'order': '24',
-        'displayName': 'light Asset Name'
+        'order': '26',
+        'displayName': 'Light Asset Name'
     },
     'lightPoll': {
         'description': 'Obtain light every nth time the plugin is pulled',
         'type': 'integer',
         'default': '1',
-        'order': '25',
-        'displayName': 'Magnetometer Poll'
+        'order': '27',
+        'displayName': 'Light Poll'
     },
     'lightEnable': {
-        'description': 'Enable Magnetometer Sensor',
+        'description': 'Enable Light Sensor',
         'type': 'boolean',
         'default': 'true',
-        'order': '26',
-        'displayName': 'Enable Magnetometer'
+        'order': '28',
+        'displayName': 'Enable Light'
     },
     'soundPort': {
         'description': 'VINT Hub port of sound sensors', 
         'type': 'string',
         'default': '0',
-        'order': '27',
-        'displayName': 'Spatial Port'
+        'order': '29',
+        'displayName': 'Sound Port'
     },
     'soundAssetName': {
         'description': 'sound sensor asset name', 
         'type': 'string',
         'default': 'sound',
-        'order': '28',
-        'displayName': 'sound Asset Name'
+        'order': '30',
+        'displayName': 'Sound Asset Name'
     },
     'soundPoll': {
         'description': 'Obtain sound every nth time the plugin is pulled',
         'type': 'integer',
         'default': '1',
-        'order': '29',
-        'displayName': 'Magnetometer Poll'
+        'order': '31',
+        'displayName': 'Sound Poll'
     },
     'soundEnable': {
-        'description': 'Enable Magnetometer Sensor',
+        'description': 'Enable Sound Sensor',
         'type': 'boolean',
         'default': 'true',
-        'order': '30',
-        'displayName': 'Enable Magnetometer'
+        'order': '32',
+        'displayName': 'Enable Sound'
     }
 
 }
@@ -412,7 +412,7 @@ def plugin_init(config):
                 else: 
                     break 
 
-        if data['lightHumEnable']['value'] == 'true':
+        if data['lightEnable']['value'] == 'true':
             data['light'].setDeviceSerialNumber(int(data['hubSN']['value']))
             data['light'].setHubPort(int(data['lightPort']['value']))
             data['light'].setIsHubPortDevice(False)
@@ -427,7 +427,7 @@ def plugin_init(config):
                 else: 
                     break 
 
-        if data['soundHumEnable']['value'] == 'true':
+        if data['soundEnable']['value'] == 'true':
             data['sound'].setDeviceSerialNumber(int(data['hubSN']['value']))
             data['sound'].setHubPort(int(data['soundPort']['value']))
             data['sound'].setIsHubPortDevice(False)
@@ -591,7 +591,7 @@ def plugin_poll(handle):
         handle['gyroscopeCount'] = (handle['gyroscopeCount'] + 1) % int(handle['gyroscopePoll']['value'])
         handle['magnetometerCount'] = (handle['magnetometerCount'] + 1) % int(handle['magnetometerPoll']['value'])
         handle['lightCount'] = (handle['lightCount'] + 1) % int(handle['lightPoll']['value']) 
-        handle['soundCount'] = (handle['soundCount'] + 1) % int(handle['soundPPoll']['value']) 
+        handle['soundCount'] = (handle['soundCount'] + 1) % int(handle['soundPoll']['value']) 
 
     except (Exception, RuntimeError) as ex:
         _LOGGER.exception("foglamp_phidget exception: {}".format(str(ex)))
@@ -739,7 +739,7 @@ def plugin_reconfigure(handle, new_config):
                 else:
                     break
 
-        if data['lightHumEnable']['value'] == 'true':
+        if data['lightEnable']['value'] == 'true':
             data['light'].setDeviceSerialNumber(int(data['hubSN']['value']))
             data['light'].setHubPort(int(data['lightPort']['value']))
             data['light'].setIsHubPortDevice(False)
@@ -754,7 +754,7 @@ def plugin_reconfigure(handle, new_config):
                 else: 
                     break 
 
-        if data['soundHumEnable']['value'] == 'true':
+        if data['soundEnable']['value'] == 'true':
             data['sound'].setDeviceSerialNumber(int(data['hubSN']['value']))
             data['sound'].setHubPort(int(data['soundPort']['value']))
             data['sound'].setIsHubPortDevice(False)
