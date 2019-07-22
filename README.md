@@ -12,7 +12,7 @@ tar -xzvf ~/libphidget22.tar.gz
 cd ~/libphidget22-1.1.20190417  
 ./configure --prefix=/ && make && sudo make install
 fn=`find -name *libphidget22.rule*`
-sudo mv ${fn} /etc/udev/rules.d. 
+sudo mv ${fn} /etc/udev/rules.d 
 ``` 
 
 * [Python](https://www.phidgets.com/docs/Language_-_Python) 
