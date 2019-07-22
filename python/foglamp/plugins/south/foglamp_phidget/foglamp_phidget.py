@@ -45,7 +45,7 @@ _DEFAULT_CONFIG = {
     'plugin': {
         'description': 'Wind Turbine Poll Plugin',
         'type': 'string',
-        'default': 'wind_turbine',
+        'default': 'foglamp_phidget',
         'readonly': 'true'
     },
     'hubSN': {
@@ -58,7 +58,7 @@ _DEFAULT_CONFIG = {
     'assetPrefix': {
         'description': 'Prefix of asset name',
         'type': 'string',
-        'default': 'wind_turbine/',
+        'default': 'foglamp_phidget/',
         'order': '2',
         'displayName': 'Asset Name Prefix'
     },
@@ -229,7 +229,7 @@ def plugin_info():
     Raises:
     """
     return {
-        'name': 'wind_turbine Poll Plugin',
+        'name': 'foglamp_phidget Poll Plugin',
         'version': '2.0.0',
         'mode': 'poll',
         'type': 'south',
@@ -356,7 +356,7 @@ def plugin_init(config):
                     break 
 
     except Exception as ex:
-        _LOGGER.exception("wind_turbine exception: {}".format(str(ex)))
+        _LOGGER.exception("foglamp_phidget exception: {}".format(str(ex)))
         raise ex
 
     # counter to know when to run process 
@@ -482,7 +482,7 @@ def plugin_poll(handle):
         handle['magnetometerCount'] = (handle['magnetometerCount'] + 1) % int(handle['magnetometerPoll']['value'])
 
     except (Exception, RuntimeError) as ex:
-        _LOGGER.exception("wind_turbine exception: {}".format(str(ex)))
+        _LOGGER.exception("foglamp_phidget exception: {}".format(str(ex)))
         raise exceptions.DataRetrievalError(ex)
     else:
         return data
@@ -497,7 +497,7 @@ def plugin_reconfigure(handle, new_config):
     Returns:
         new_handle: new handle to be used in the future calls
     """
-    _LOGGER.info("Old config for wind_turbine plugin {} \n new config {}".format(handle, new_config))
+    _LOGGER.info("Old config for foglamp_phidget plugin {} \n new config {}".format(handle, new_config))
     # Shutdown sensors 
     try: 
         handle['humidity'].close() 
@@ -508,7 +508,7 @@ def plugin_reconfigure(handle, new_config):
         handle['gyroscope'].close() 
         handle['magnetometer'].close() 
     except Exception as ex:
-        _LOGGER.exception("wind_turbine exception: {}".format(str(ex)))
+        _LOGGER.exception("foglamp_phidget exception: {}".format(str(ex)))
         raise ex
     time.sleep(5) 
     new_handle = copy.deepcopy(new_config)
@@ -630,7 +630,7 @@ def plugin_reconfigure(handle, new_config):
         else:
             new_handle['restart'] = 'no'
     except Exception as ex:
-        _LOGGER.exception("wind_turbine exception: {}".format(str(ex)))
+        _LOGGER.exception("foglamp_phidget exception: {}".format(str(ex)))
         raise ex
 
     # counter to know when to run process
@@ -664,6 +664,6 @@ def plugin_shutdown(handle):
         handle['gyroscope'].close()
         handle['magnetometer'].close()
     except Exception as ex:
-        _LOGGER.exception("wind_turbine exception: {}".format(str(ex)))
+        _LOGGER.exception("foglamp_phidget exception: {}".format(str(ex)))
         raise ex
-    _LOGGER.info('wind_turbine plugin shut down.')
+    _LOGGER.info('foglamp_phidget plugin shut down.')
