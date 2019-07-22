@@ -564,12 +564,34 @@ def plugin_poll(handle):
                 }  
             })
 
+        if handle['lightEnable']['value'] == 'true' and handle['lightCount'] == 0:
+            data.append({
+                'asset': '{}{}'.format(handle['assetPrefix']['value'], handle['lightAssetName']['value']),
+                'timestamp': time_stamp,
+                'key': str(uuid.uuid4()),
+                'readings': {
+                    "light": handle['light'].getIlluminance() 
+                }
+            })
+
+        if handle['soundEnable']['value'] == 'true' and handle['soundCount'] == 0:
+            data.append({
+                'asset': '{}{}'.format(handle['assetPrefix']['value'], handle['soundAssetName']['value']),
+                'timestamp': time_stamp,
+                'key': str(uuid.uuid4()),
+                'readings': {
+                    "sound": handle['sound'].getdB() ,
+                }    
+            })
+
         handle['tempHumCount'] = (handle['tempHumCount'] + 1) % int(handle['tempHumPoll']['value'])
         handle['currentCount'] = (handle['currentCount'] + 1) % int(handle['currentPoll']['value']) 
         handle['encoderCount'] = (handle['encoderCount'] + 1) % int(handle['encoderPoll']['value']) 
         handle['accelerometerCount'] = (handle['accelerometerCount'] + 1) % int(handle['accelerometerPoll']['value'])
         handle['gyroscopeCount'] = (handle['gyroscopeCount'] + 1) % int(handle['gyroscopePoll']['value'])
         handle['magnetometerCount'] = (handle['magnetometerCount'] + 1) % int(handle['magnetometerPoll']['value'])
+        handle['lightCount'] = (handle['lightCount'] + 1) % int(handle['lightPoll']['value']) 
+        handle['soundCount'] = (handle['soundCount'] + 1) % int(handle['soundPPoll']['value']) 
 
     except (Exception, RuntimeError) as ex:
         _LOGGER.exception("foglamp_phidget exception: {}".format(str(ex)))
