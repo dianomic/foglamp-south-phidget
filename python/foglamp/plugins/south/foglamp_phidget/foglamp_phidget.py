@@ -30,7 +30,9 @@ from Phidget22.Devices.CurrentInput import *
 from Phidget22.Devices.Encoder import *
 from Phidget22.Devices.Gyroscope import *
 from Phidget22.Devices.HumiditySensor import *
+from Phidget22.Devices.LightSensor import *
 from Phidget22.Devices.Magnetometer import *
+from Phidget22.Devices.SoundSensor import *
 from Phidget22.Devices.TemperatureSensor import *
 from Phidget22.PhidgetException import *
 from Phidget22.Phidget import *
@@ -413,6 +415,7 @@ def plugin_init(config):
                     break 
 
         if data['lightEnable']['value'] == 'true':
+            data['light'] = LightSensor()
             data['light'].setDeviceSerialNumber(int(data['hubSN']['value']))
             data['light'].setHubPort(int(data['lightPort']['value']))
             data['light'].setIsHubPortDevice(False)
@@ -428,6 +431,7 @@ def plugin_init(config):
                     break 
 
         if data['soundEnable']['value'] == 'true':
+            data['sound'] = SoundSensor()
             data['sound'].setDeviceSerialNumber(int(data['hubSN']['value']))
             data['sound'].setHubPort(int(data['soundPort']['value']))
             data['sound'].setIsHubPortDevice(False)
@@ -612,15 +616,23 @@ def plugin_reconfigure(handle, new_config):
     _LOGGER.info("Old config for foglamp_phidget plugin {} \n new config {}".format(handle, new_config))
     # Shutdown sensors 
     try: 
-        handle['humidity'].close() 
-        handle['temperature'].close()
-        handle['current'].close() 
-        handle['encoder'].close() 
-        handle['accelerometer'].close()  
-        handle['gyroscope'].close() 
-        handle['magnetometer'].close() 
-        handle['light'].close() 
-        handle['sound'].close() 
+        if handle['tempHumEnable']['value'] == 'true':
+            handle['humidity'].close() 
+            handle['temperature'].close()
+        if handle['currentEnable']['value'] == 'true':
+            handle['current'].close() 
+        if andle['encoderEnable']['value'] == 'true':
+            handle['encoder'].close() 
+        if handle['accelerometerEnable']['value'] == 'true':
+            handle['accelerometer'].close()  
+        if handle['gyroscopeEnable']['value'] == 'true':
+            handle['gyroscope'].close() 
+        if handle['magnetometerEnable']['value'] == 'true': 
+            handle['magnetometer'].close() 
+        if handle['lightEnable']['value'] == 'true':
+            handle['light'].close() 
+        if handle['soundEnable']['value'] == 'true':
+            handle['sound'].close() 
 
     except Exception as ex:
         _LOGGER.exception("foglamp_phidget exception: {}".format(str(ex)))
