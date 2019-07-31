@@ -49,7 +49,7 @@ _DEFAULT_CONFIG = {
     'mapping': {
         'description': 'Phidget Mapping',
         'type': 'JSON',
-        'default': '{"values":[{"hubSN":538395,"port":0,"sensorType":"TemperatureSensor","assetName":"weather"},{"hubSN":538395,"port":0,"sensorType":"HumiditySensor","assetName":"weather"},{"hubSN":538395,"port":1,"sensorType":"LightSensor","assetName":"light"},{"hubSN":538395,"port":2,"sensorType":"SoundSensor","assetName":"sound"}]}',
+        'default': '{"values":[{"hubSN":538395,"port":0,"sensorType":"TemperatureSensor","assetName":"weather","poll":1},{"hubSN":538395,"port":0,"sensorType":"HumiditySensor","assetName":"weather","poll":1},{"hubSN":538395,"port":1,"sensorType":"LightSensor","assetName":"light","poll":1},{"hubSN":538395,"port":2,"sensorType":"SoundSensor","assetName":"sound","poll":1}]}',
         'order': '2',
         'displayName': 'Phidget Map'
     }
@@ -95,8 +95,9 @@ def plugin_init(config):
                         if "hubSN" in entry and isinstance(entry["hubSN"],int) and \
                                 "port" in entry and isinstance(entry["port"],int) and \
                                 "sensorType" in entry and isinstance(entry["sensorType"],str) and \
+                                "poll" in entry and isinstance(entry["poll"],int) and \
                                 "assetName" in entry and isinstance(entry["assetName"],str):
-                            sensors.append(getattr(wrapper, entry["sensorType"] + "Wrapper")(entry["hubSN"], entry["port"], entry["assetName"]))
+                            sensors.append(getattr(wrapper, entry["sensorType"] + "Wrapper")(entry["hubSN"], entry["port"], entry["assetName"], entry['poll']))
                     else:
                         print('Error: entry in list must be a dictionary')
             else:
@@ -128,15 +129,19 @@ def plugin_poll(handle):
     try:
         time_stamp = utils.local_timestamp()
         for sensor in handle['sensors']:
-            if sensor.assetName in data:
-                data[sensor.assetName]['readings'] = {**data[sensor.assetName]['readings'], **sensor.get_reading()}
-            else:
-                data[sensor.assetName] = {
-                    'asset': '{}{}'.format(handle['assetPrefix']['value'], sensor.assetName),
-                    'timestamp': time_stamp,
-                    'key': str(uuid.uuid4()),
-                    'readings': sensor.get_reading()
-                }
+            if sensor.count == 0:
+                readings = sensor.get_reading()
+                if readings is not None:
+                    if sensor.assetName in data:
+                        data[sensor.assetName]['readings'] = {**data[sensor.assetName]['readings'], **readings}
+                    else:
+                        data[sensor.assetName] = {
+                            'asset': '{}{}'.format(handle['assetPrefix']['value'], sensor.assetName),
+                            'timestamp': time_stamp,
+                            'key': str(uuid.uuid4()),
+                            'readings': readings
+                        }
+            sensor.count = (sensor.count + 1) % sensor.poll
     except (Exception, RuntimeError) as ex:
         _LOGGER.exception("phidget exception: {}".format(str(ex)))
         raise exceptions.DataRetrievalError(ex)
