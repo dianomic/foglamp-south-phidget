@@ -126,10 +126,10 @@ def plugin_poll(handle):
         TimeoutError
     """
     data = {}
-    try:
-        time_stamp = utils.local_timestamp()
-        for sensor in handle['sensors']:
-            if sensor.count == 0:
+    time_stamp = utils.local_timestamp()
+    for sensor in handle['sensors']:
+        if sensor.count == 0:
+            try:
                 readings = sensor.get_reading()
                 if readings is not None:
                     if sensor.assetName in data:
@@ -141,12 +141,10 @@ def plugin_poll(handle):
                             'key': str(uuid.uuid4()),
                             'readings': readings
                         }
-            sensor.count = (sensor.count + 1) % sensor.poll
-    except (Exception, RuntimeError) as ex:
-        _LOGGER.exception("phidget exception: {}".format(str(ex)))
-        raise exceptions.DataRetrievalError(ex)
-    else:
-        return list(data.values())
+            except (Exception, RuntimeError) as ex:
+                _LOGGER.exception("phidget exception: {}".format(str(ex)))
+        sensor.count = (sensor.count + 1) % sensor.poll
+    return list(data.values())
 
 
 def plugin_reconfigure(handle, new_config):
@@ -175,5 +173,8 @@ def plugin_shutdown(handle):
     Returns:
         plugin shutdown
     """
+    for sensor in handle['sensors']:
+        sensor.close()
     _LOGGER.info('phidget plugin shut down.')
+
 
