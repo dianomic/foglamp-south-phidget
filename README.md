@@ -1,23 +1,37 @@
-The packages can be installed with given [requirements.sh](requirements.sh) or manual with below steps:
 
 # Prerequisites
+The foglamp-south-phidget plugin requires libusb-1.0.0-dev, libphidget22, and the Phidget Python module. 
+
+The packages can be installed with given [extras_install.sh](extras_install.sh) or manual with below steps:
+
 
 # Install 
 * [System](https://www.phidgets.com/docs/OS_-_Linux#Quick_Downloads)
 ``` 
-cd 
-sudo apt-get install libusb-1.0-0-dev
-wget https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22.tar.gz 
-tar -xzvf ~/libphidget22.tar.gz
-cd ~/libphidget22-1.1.20190417  
-./configure --prefix=/ && make && sudo make install
+# install libusb
+apt-get install libusb-1.0.0-dev
+
+# install libphidget22
+rm -rf /tmp/foglamp-phidget-install
+mkdir /tmp/foglamp-phidget-install
+cd /tmp/foglamp-phidget-install
+wget https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22.tar.gz
+tar -xzvf libphidget22.tar.gz
+cd libphidget22-*
+./configure --prefix=/ && make && make install
 fn=`find -name *libphidget22.rule*`
-sudo mv ${fn} /etc/udev/rules.d 
+
+# add udev rule file to allow access to the Phidget when running from non-root user
+mv `find -name *libphidget22.rule*` /etc/udev/rules.d/.
+cd
+rm -rf /tmp/foglamp-phidget-install
+
 ``` 
 
 * [Python](https://www.phidgets.com/docs/Language_-_Python) 
 ```
-pip3 install Phidget22
+# install Phidget python module
+pip3 install -r python/requirements-phidget.txt
 
 ```
 
