@@ -55,6 +55,7 @@ Asset Name Prefix - a string to prefix the asset name for all assets of an insta
 Phidget Map - a JSON object specifying the VINT hubs and corresponding sensors to ingest data from.
 
 * Example: Single hub, single sensor
+
 In the following example, we are connecting a single temperature sensor connected to a single VINT hub on port 0.
 The hubSN is the VINT hub serial number to connect to. 
 The sensorType is TemperatureSensor (look at the "Supported Sensor Modules" table for currently support sensorType entries. 
@@ -78,6 +79,7 @@ The poll is 1, which specifies that the temeprature sensor should be polled ever
 
 
 * Example: Single hub, two sensors
+
 In the following example, in a single VINT hub, we are connecting a temperature sensor on port 0 and a sound sensor on port 1.
 The sensorType is SoundSensor. 
 The assetName we chose to use is "soundlevel", but it is configurable to what the user chooses.
@@ -105,6 +107,7 @@ The poll is 10, which specifies that the sound sensor should be polled every ten
 ```
 
 * Example: Two hubs, three sensors
+
 In the following example, one VINT hub is connecting a temperature sensor on port 0 and a sound sensor on port 1 while another CINT hub is connected to another temperture sensor.
 The hubSN for the new entry is different that the first two, as it is connected to a separate VINT hub.
 The sensorType is Temperature Sensor, but we specify a different assetName "temperature02", to differentiate from the other temperature sensor "temperature03".
@@ -137,6 +140,7 @@ The sensorType is Temperature Sensor, but we specify a different assetName "temp
 ```
 
 * Example: all sensors we have tested
+
 The following example shows configuration for all sensors we have connected and tested so far.
 ```
 {
