@@ -9,19 +9,15 @@ from Phidget22.Devices.Magnetometer import *
 from Phidget22.Devices.Encoder import *
 from Phidget22.PhidgetException import *
 from Phidget22.Phidget import *
-
-
-import uuid
 import time
-from foglamp.plugins.common import utils
 
 
 class TemperatureSensorWrapper:
-    def __init__(self, hub, port, assetName, poll):
-        self.hub = hub
-        self.port = port
-        self.assetName = assetName
-        self.poll = poll
+    def __init__(self, args):
+        self.hub = args['hubSN']
+        self.port = args['port']
+        self.assetName = args['assetName']
+        self.poll = args['poll']
         self.count = 0
         self.temp = TemperatureSensor()
         self.temp.setDeviceSerialNumber(self.hub)
@@ -43,11 +39,11 @@ class TemperatureSensorWrapper:
         del(self.temp)
 
 class HumiditySensorWrapper:
-    def __init__(self, hub, port, assetName, poll):
-        self.hub = hub
-        self.port = port
-        self.assetName = assetName
-        self.poll = poll
+    def __init__(self, args):
+        self.hub = args['hubSN']
+        self.port = args['port']
+        self.assetName = args['assetName']
+        self.poll = args['poll']
         self.count = 0
         self.hum = HumiditySensor()
         self.hum.setDeviceSerialNumber(self.hub)
@@ -69,11 +65,11 @@ class HumiditySensorWrapper:
         del(self.hum)
 
 class LightSensorWrapper:
-    def __init__(self, hub, port, assetName, poll):
-        self.hub = hub
-        self.port = port
-        self.assetName = assetName
-        self.poll = poll
+    def __init__(self, args):
+        self.hub = args['hubSN']
+        self.port = args['port']
+        self.assetName = args['assetName']
+        self.poll = args['poll']
         self.count = 0
         self.light = LightSensor()
         self.light.setDeviceSerialNumber(self.hub)
@@ -95,11 +91,11 @@ class LightSensorWrapper:
         del(self.light)
 
 class SoundSensorWrapper:
-    def __init__(self, hub, port, assetName, poll):
-        self.hub = hub
-        self.port = port
-        self.assetName = assetName
-        self.poll = poll
+    def __init__(self, args):
+        self.hub = args['hubSN']
+        self.port = args['port']
+        self.assetName = args['assetName']
+        self.poll = args['poll']
         self.count = 0
         self.sound = SoundSensor()
         self.sound.setDeviceSerialNumber(self.hub)
@@ -121,11 +117,11 @@ class SoundSensorWrapper:
         del(self.sound)
 
 class CurrentInputWrapper:
-    def __init__(self, hub, port, assetName, poll):
-        self.hub = hub
-        self.port = port
-        self.assetName = assetName
-        self.poll = poll
+    def __init__(self, args):
+        self.hub = args['hubSN']
+        self.port = args['port']
+        self.assetName = args['assetName']
+        self.poll = args['poll']
         self.count = 0
         self.current = CurrentInput()
         self.current.setDeviceSerialNumber(self.hub)
@@ -147,11 +143,11 @@ class CurrentInputWrapper:
         del(self.current)
 
 class AccelerometerWrapper:
-    def __init__(self, hub, port, assetName, poll):
-        self.hub = hub
-        self.port = port
-        self.assetName = assetName
-        self.poll = poll
+    def __init__(self, args):
+        self.hub = args['hubSN']
+        self.port = args['port']
+        self.assetName = args['assetName']
+        self.poll = args['poll']
         self.count = 0
         self.accelerometer = Accelerometer()
         self.accelerometer.setDeviceSerialNumber(self.hub)
@@ -181,11 +177,11 @@ class AccelerometerWrapper:
         del(self.accelerometer)
 
 class GyroscopeWrapper:
-    def __init__(self, hub, port, assetName, poll):
-        self.hub = hub
-        self.port = port
-        self.assetName = assetName
-        self.poll = poll
+    def __init__(self, args):
+        self.hub = args['hubSN']
+        self.port = args['port']
+        self.assetName = args['assetName']
+        self.poll = args['poll']
         self.count = 0
         self.gyroscope = Gyroscope()
         self.gyroscope.setDeviceSerialNumber(self.hub)
@@ -215,11 +211,11 @@ class GyroscopeWrapper:
         del(self.gyroscope)
 
 class MagnetometerWrapper:
-    def __init__(self, hub, port, assetName, poll):
-        self.hub = hub
-        self.port = port
-        self.assetName = assetName
-        self.poll = poll
+    def __init__(self, args):
+        self.hub = args['hubSN']
+        self.port = args['port']
+        self.assetName = args['assetName']
+        self.poll = args['poll']
         self.count = 0
         self.magnetometer = Magnetometer()
         self.magnetometer.setDeviceSerialNumber(self.hub)
@@ -248,12 +244,13 @@ class MagnetometerWrapper:
         self.magnetometer.close()
         del(self.magnetometer)
 
-class RotaryEncoderWrapper:
-    def __init__(self, hub, port, assetName, poll):
-        self.hub = hub
-        self.port = port
-        self.assetName = assetName
-        self.poll = poll
+class EncoderWrapper:
+    def __init__(self, args):
+        self.hub = args['hubSN']
+        self.port = args['port']
+        self.assetName = args['assetName']
+        self.poll = args['poll']
+        self.ppr = args['pulsesPerRevolution']
         self.count = 0
         self.prevPosition = None
         self.prevTime = None
@@ -280,9 +277,10 @@ class RotaryEncoderWrapper:
         currentPosition = self.encoder.getPosition()
         currentTime = time.time()
         secondsDelta = currentTime - self.prevTime
-        rotationsDelta = (currentPosition  - self.prevPosition)/1200.00
+        rotationsDelta = (currentPosition  - self.prevPosition)/self.ppr
         rpm = (rotationsDelta/secondsDelta)*60
         data = {
+                'position' : currentPosition,
                 'rotationsdelta' : rotationsDelta,
                 'secondsdelta' : secondsDelta,
                 'rpm' : rpm

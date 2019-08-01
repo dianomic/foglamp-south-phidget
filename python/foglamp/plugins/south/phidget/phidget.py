@@ -97,7 +97,7 @@ def plugin_init(config):
                                 "sensorType" in entry and isinstance(entry["sensorType"],str) and \
                                 "poll" in entry and isinstance(entry["poll"],int) and \
                                 "assetName" in entry and isinstance(entry["assetName"],str):
-                            sensors.append(getattr(wrapper, entry["sensorType"] + "Wrapper")(entry["hubSN"], entry["port"], entry["assetName"], entry['poll']))
+                            sensors.append(getattr(wrapper, entry["sensorType"] + "Wrapper")(entry))
                     else:
                         print('Error: entry in list must be a dictionary')
             else:
