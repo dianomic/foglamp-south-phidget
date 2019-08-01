@@ -22,21 +22,21 @@
 
 set -e
 
-# Apt package
-sudo apt-get install libusb-1.0-0-dev
-
-mkdir /tmp/wind-turbine-install
-cd /tmp/wind-turbine-install
-
-# Linux specific prerequisites - https://www.phidgets.com/docs/OS_-_Linux
-wget https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22.tar.gz
-tar -xzvf /tmp/wind-turbine-install/libphidget22.tar.gz
-cd /tmp/wind-turbine-install/libphidget22-*
-./configure --prefix=/ && make && sudo make install
-fn=`find -name *libphidget22.rule*`
-sudo mv ${fn} /etc/udev/rules.d.
+# Apt based requirements
+apt-get install libusb-1.0-0-dev
 
 # Python3 specific prerequisites - https://www.phidgets.com/docs/Language_-_Python 
-pip3 install -Ir python/requirements-foglamp_phidget.txt --no-cache-dir
+pip3 install -Ir python/requirements-phidget.txt --no-cache-dir
 
-sudo rm -rf /tmp/wind-turbine-install
+# Linux specific prerequisites - https://www.phidgets.com/docs/OS_-_Linux
+rm -rf /tmp/foglamp-phidget-install
+mkdir /tmp/foglamp-phidget-install
+cd /tmp/foglamp-phidget-install
+wget https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22.tar.gz
+tar -xzvf libphidget22.tar.gz
+cd libphidget22-*
+./configure --prefix=/ && make && make install
+fn=`find -name *libphidget22.rule*`
+mv `find -name *libphidget22.rule*` /etc/udev/rules.d/.
+cd
+rm -rf /tmp/foglamp-phidget-install
