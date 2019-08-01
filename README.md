@@ -4,9 +4,6 @@ The foglamp-south-phidget plugin requires libusb-1.0.0-dev, libphidget22, and th
 
 The packages can be installed with given [extras_install.sh](extras_install.sh) or manual with below steps:
 
-
-# Install 
-* [System](https://www.phidgets.com/docs/OS_-_Linux#Quick_Downloads)
 ``` 
 # install libusb
 apt-get install libusb-1.0.0-dev
@@ -27,13 +24,17 @@ cd
 rm -rf /tmp/foglamp-phidget-install
 
 ``` 
-
 * [Python](https://www.phidgets.com/docs/Language_-_Python) 
 ```
 # install Phidget python module
 pip3 install -r python/requirements-phidget.txt
 
 ```
+
+# Install
+
+Simply copy the python directory to the FOGLAMP_ROOT directory:
+cp -r python [FOGLAMP_ROOT]/.
 
 
 # Supported Sensor Modules
