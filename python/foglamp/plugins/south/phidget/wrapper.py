@@ -7,6 +7,7 @@ from Phidget22.Devices.Accelerometer import *
 from Phidget22.Devices.Gyroscope import *
 from Phidget22.Devices.Magnetometer import *
 from Phidget22.Devices.Encoder import *
+from Phidget22.Devices.VoltageInput import *
 from Phidget22.PhidgetException import *
 from Phidget22.Phidget import *
 import time
@@ -129,6 +130,7 @@ class CurrentInputWrapper:
         self.current.setIsHubPortDevice(False)
         self.current.setChannel(0)
         self.current.openWaitForAttachment(5000)
+        self.current.setDataInterval(20)
         try:
             self.current.getCurrent()
         except Exception:
@@ -291,3 +293,30 @@ class EncoderWrapper:
     def close(self):
         self.encoder.close()
         del(self.encoder)
+
+class VoltageInputWrapper:
+    def __init__(self, args):
+        self.hub = args['hubSN']
+        self.port = args['port']
+        self.assetName = args['assetName']
+        self.poll = args['poll']
+        self.count = 0
+        self.voltage = VoltageInput()
+        self.voltage.setDeviceSerialNumber(self.hub)
+        self.voltage.setHubPort(self.port)
+        self.voltage.setIsHubPortDevice(False)
+        self.voltage.setChannel(0)
+        self.voltage.openWaitForAttachment(5000)
+        self.voltage.setDataInterval(40)
+        try:
+            self.voltage.getCurrent()
+        except Exception:
+            pass
+    def get_reading(self):
+        data = {
+                'voltage' : self.voltage.getVoltage()
+        }
+        return data
+    def close(self):
+        self.voltage.close()
+        del(self.voltage)
