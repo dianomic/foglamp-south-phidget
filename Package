@@ -9,7 +9,7 @@ plugin_package_name=foglamp-south-phidget
 #   1. Generic packages we depend on in all architectures and package managers
 #   2. Architecture specific packages we depend on
 #   3. Package manager specific packages we depend on
-requirements="foglamp,libusb-1.0-0-dev"
+requirements="foglamp"
 
 case "$arch" in
 	x86_64)
@@ -21,7 +21,9 @@ case "$arch" in
 esac
 case "$package_manager" in
 	deb)
+	    requirements="${requirements},libusb-1.0-0-dev"
 		;;
 	rpm)
+	    requirements="${requirements},libusb1-devel"
 		;;
 esac

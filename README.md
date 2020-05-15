@@ -6,7 +6,10 @@ The packages can be installed with given [extras_install.sh](extras_install.sh) 
 
 ``` 
 # install libusb
+# Debian based
 apt-get install libusb-1.0.0-dev
+# Rpm based
+yum install libusb1-devel
 
 # install libphidget22
 rm -rf /tmp/foglamp-phidget-install
