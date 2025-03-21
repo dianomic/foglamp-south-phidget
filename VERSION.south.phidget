@@ -1,2 +1,2 @@
-foglamp_south_phidget_version=2.6.0
-foglamp_version>=2.6
+foglamp_south_phidget_version=3.0.0
+foglamp_version>=3.0
